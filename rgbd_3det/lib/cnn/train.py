@@ -14,6 +14,8 @@ import os
 from caffe.proto import caffe_pb2
 import google.protobuf as pb2
 from config import cfg
+import google.protobuf.text_format
+
 
 class SolverWrapper(object):
 

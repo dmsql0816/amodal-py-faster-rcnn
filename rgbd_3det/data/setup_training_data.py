@@ -2,12 +2,18 @@
 """
   set up training set for 19 classes object detection
 """
-import rgbd_3det._init_paths
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+import _init_paths
+#import rgbd_3det._init_paths
 import os.path as osp
 import scipy.io as sio
 from cnn.config import cfg
 import PIL
 import cPickle
+#import _pickle
 import numpy as np
 import math
 
@@ -29,7 +35,7 @@ def get_boxes_3d(gt_boxes_3d, prop_boxes, max_classes):
 
     cls = max_classes[n_gt_boxes:]
     props = np.zeros((0, 7), dtype=prop_boxes.dtype)
-    for i in xrange(len(cls)):
+    for i in range(len(cls)):
         label = cls[i]
         sid = label*7
         eid = sid + 7
@@ -108,7 +114,7 @@ if __name__ == '__main__':
         tmp = sio.loadmat(osp.join(matlab_path, 'gt_3D_19', str(int(im_name)) + '.mat'))
         gt_boxes_3d = tmp['gt_boxes_3d'].astype(np.float32)
         if gt_boxes_3d.shape[0] == 0:
-            print 'no gt for target objects and skip.'
+            print('no gt for target objects and skip.')
             continue
 
         # gt2Dsel [xmin, ymin, xmax, ymax]
@@ -176,10 +182,10 @@ if __name__ == '__main__':
 
     if cfg.TRAIN.USE_FLIPPED:
         widths = [PIL.Image.open(roidb[i]['image']).size[0]
-                  for i in xrange(num_images)]
+                  for i in range(num_images)]
         print('flipping...')
-        for i in xrange(num_images):
-            print '{}image'.format(i)
+        for i in range(num_images):
+            print('{}image'.format(i))
             # flip 2d boxes
             boxes = roidb[i]['boxes'].copy()
             oldx1 = boxes[:, 0].copy()
@@ -214,13 +220,14 @@ if __name__ == '__main__':
 
             roidb.append(entry)
 
-    print "total images: {}".format(len(roidb))
+    print("total images: {}".format(len(roidb)))
 
-    print "all keys: {}".format(roidb[0].keys())
+    print("all keys: {}".format(roidb[0].keys()))
     # save training / test  data
     cache_file = 'roidb_trainval_19.pkl'
     with open(cache_file, 'wb') as fid:
-        cPickle.dump(roidb, fid, cPickle.HIGHEST_PROTOCOL)
-        print 'wrote ss roidb to {}'.format(cache_file)
+ 	#cPickle.dump(roidb, fid, cPickle.HIGHEST_PROTOCOL)
+ 	cPickle.dump(roidb, fid, protocol=2)
+        print('wrote ss roidb to {}'.format(cache_file))
 
-    print "training data preparation is completed"
+    print("training data preparation is completed")

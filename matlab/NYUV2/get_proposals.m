@@ -1,7 +1,7 @@
 % compute proposals for both 2D and 3D
 %
 
-dataset_path = '../../dataset/NYUV2';
+dataset_path = '~/Amodal3Det/dataset/NYUV2';
 
 % detection classes
 det_classes = {'bathtub',  'bed', 'bookshelf', 'box', 'chair', 'counter', ...
@@ -18,9 +18,9 @@ K = GetIntrinsicMat('nyu_color_standard_crop');
 for i = 1 : 1449
     imPackName = sprintf('NYU%.4d', i);
     fprintf('%s \n', imPackName);
-    
-    % 2d proposals (format: [xmin, ymin, xmax, ymax], start at 0)
-    var = load(fullfile('Segs', imPackName, 'candidates.mat'));
+   % 
+  % 2d proposals (format: [xmin, ymin, xmax, ymax], start at 0)
+    var = load(fullfile('~/Amodal3Det/matlab/NYUV2/Segs', imPackName, 'candidates.mat'));
     candidates = var.candidates;
     bbox_2d = candidates.bboxes;
     boxes = bbox_2d(:, [2,1,4,3]) - 1;
@@ -29,8 +29,8 @@ for i = 1 : 1449
     h = boxes(:, 4) - boxes(:, 2) + 1;
     A = w.*h;
     valid = find(A >= 200);
-    boxes2d_prop = boxes(valid, :);
-    save(fullfile('proposal2d', [num2str(i), '.mat']), 'boxes2d_prop');
+    %boxes2d_prop = boxes(valid, :);
+    %save(fullfile('proposal2d', [num2str(i), '.mat']), 'boxes2d_prop');
     
     % 3d proposals
     sp_base = candidates.superpixels;
@@ -44,6 +44,6 @@ for i = 1 : 1449
     load(fullfile(dataset_path, 'rawDepth', [num2str(i), '.mat']));
     % 
     boxes3d_prop = get_3d_proposals(rawDepth, K, sp_base, sp_label, depth_fill, avg_boxDims_cls);
-    save(fullfile('proposal3d', [num2str(i), '.mat']), 'boxes3d_prop');
+    save(fullfile('~/Amodal3Det/matlab/NYUV2/proposal3d', [num2str(i), '.mat']), 'boxes3d_prop');
     
 end

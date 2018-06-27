@@ -45,7 +45,8 @@ class m_RoIDataLayer(caffe.Layer):
 
         # parse the layer parameter string, which must be valid YAML
         # para_str_ is defined in the train.prototxt, e.g., python_param {}
-        layer_params = yaml.load(self.param_str_)
+        #layer_params = yaml.load(self.param_str_)
+        layer_params = yaml.load(self.param_str)
 
         self._num_classes = layer_params['num_classes']
 

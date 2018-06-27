@@ -23,7 +23,7 @@ def get_minibatch(roidb, num_classes):
     rois_per_image = cfg.TRAIN.BATCH_SIZE / num_images
 
     # the number of positive rois per image
-    fg_rois_per_image = np.round(cfg.TRAIN.FG_FRACTION * rois_per_image)
+    fg_rois_per_image = np.round(cfg.TRAIN.FG_FRACTION * rois_per_image).astype(np.int)
 
     # Get the input images blob (n, channel, h, w), and scales formatted for caffe
     im_blob = _get_image_blob(roidb)
@@ -96,6 +96,7 @@ def _sample_rois(roidb, fg_rois_per_image, rois_per_image):
     # Guard against the case when an image has fewer than fg_rois_per_image
     # foreground RoIs
     fg_rois_per_this_image = np.minimum(fg_rois_per_image, fg_inds.size)
+    fg_rois_per_this_image = int(fg_rois_per_this_image) ##
     # Sample foreground regions without replacement
     if fg_inds.size > 0:
         fg_inds = npr.choice(fg_inds, size=fg_rois_per_this_image, replace=False)
@@ -232,8 +233,11 @@ def _get_bbox_3d_regression_labels(bbox_3d_target_data, num_classes):
     inds = np.where(clss > 0)[0]
     for ind in inds:
         cls = clss[ind]
+	#cls = int(clss[ind])
         start = 7 * cls
         end = start + 7
+	start = int(start) #
+	end = int(end)	#
         bbox_3d_targets[ind, start:end] = bbox_3d_target_data[ind, 1:]
         bbox_loss_3d_weights[ind, start:end] = [1., 1., 1., 1., 1., 1., 1.]
 

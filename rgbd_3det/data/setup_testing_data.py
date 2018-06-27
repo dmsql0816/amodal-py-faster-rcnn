@@ -1,4 +1,8 @@
-import rgbd_3det._init_paths
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+import _init_paths
 import os.path as osp
 import scipy.io as sio
 import numpy as np
@@ -68,12 +72,12 @@ if __name__ == '__main__':
 
         roidb.append(data)
 
-    print "total images: {}".format(len(roidb))
+    print("total images: {}".format(len(roidb)))
 
     # save training / test  data
     cache_file = 'roidb_test_19.pkl'
     with open(cache_file, 'wb') as fid:
-        cPickle.dump(roidb, fid, cPickle.HIGHEST_PROTOCOL)
-        print 'wrote ss roidb to {}'.format(cache_file)
+        cPickle.dump(roidb, fid)
+        print ('wrote ss roidb to {}'.format(cache_file))
 
-    print "test data preparation is completed"
+    print ("test data preparation is completed")

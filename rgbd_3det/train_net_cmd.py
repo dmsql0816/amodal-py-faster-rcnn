@@ -1,5 +1,3 @@
-
-
 import _init_paths
 import caffe
 import numpy as np
@@ -63,13 +61,13 @@ if __name__ == '__main__':
     if osp.exists(cache_file):
         with open(cache_file, 'rb') as fid:
             roidb = cPickle.load(fid)
-        print 'raw data is loaded from {}'.format(cache_file)
+        print ('raw data is loaded from {}'.format(cache_file))
     else:
-        print "cache_file is {}".format(cache_file)
+        print ("cache_file is {}".format(cache_file))
 
     print(len(roidb))
 
     # training a rgbd detection network
-    print 'Output will be saved to `{:s}`'.format(output_dir)
+    print ('Output will be saved to `{:s}`'.format(output_dir))
     # solver_file = osp.join('models', 'solver.prototxt')
     train_net(args.solver, roidb, output_dir, pretrained_model=args.pretrained_model, max_iters=args.max_iters)
